@@ -54,3 +54,7 @@ Route::controller(LokasiController::class)->group(function () {
     Route::delete('data-lokasi/delete', 'data_lokasi_delete');
     Route::get('get-data-lokasi/{id}', 'get_data_lokasi');
 });
+
+// Route::group(['middleware' => 'auth:web'], function () {
+//     Route::get('/data-lokasi',[LokasiController::class, 'data_lokasi']);
+// });

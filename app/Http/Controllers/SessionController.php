@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:web');
+    }
+
     public function cek_session(){
         try{
             $token = session()->get('tokenJWT');
