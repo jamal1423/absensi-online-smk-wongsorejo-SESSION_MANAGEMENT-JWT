@@ -58,7 +58,7 @@
           <th>Nama</th>
           <th>Latitude</th>
           <th>Longitude</th>
-          <th>Radius</th>
+          <th>Radius (meter)</th>
           <th>#</th>
         </tr>
       </thead>
@@ -67,9 +67,9 @@
         <tr>
           <td>{{ $dataLokasi->firstItem()+$key }}</td>
           <td>{{ $lokasi->nama }}</td>
-          <td>{{ $lokasi->latitude }}</td>
-          <td>{{ $lokasi->longitude }}</td>
-          <td>{{ $lokasi->radius }}</td>
+          <td>{{ number_format($lokasi->latitude,8) }}</td>
+          <td>{{ number_format($lokasi->longitude,8) }}</td>
+          <td>{{ number_format($lokasi->radius,0) }}</td>
           <td>
             <div class="dropdown">
             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
@@ -137,11 +137,11 @@
       @endif
       
       @if(Session::get('lokasiEdit') == 'ok')
-        Data kelas berhasil diubah.
+        Data lokasi berhasil diubah.
       @endif
       
       @if(Session::get('lokasiDelete') == 'ok')
-        Data kelas berhasil dihapus.
+        Data lokasi berhasil dihapus.
       @endif
       
       @if(Session::get('lokasiError') == 'ok')
@@ -166,7 +166,6 @@
             <div class="row">
                 <div class="col mb-3">
                     <label for="nameBasic" class="form-label">Nama Lokasi</label>
-                    <input type="hidden" name="id" id="id-lokasi">
                     <input type="text" class="form-control @error('nama') is-invalid @enderror" placeholder="Nama" id="nama-lokasi" name="nama" value="{{ old('nama') }}">
                     @error('nama')
                         <div class="form-text text-danger">{{ $message }}</div>
@@ -178,7 +177,6 @@
                 <div class="col mb-3">
                     <div class="form-group">
                         <label for="nameBasic" class="form-label">Nama Lokasi</label>
-                        {{-- <label class="control-label">Lokasi <span class="text-danger">*</span></label> --}}
                         <div class="pac-container" style="display: none">
                             <input id="pac-input" class="controls" type="text" placeholder="Masukan Lokasi">
                         </div>
@@ -236,13 +234,13 @@
       <div class="modal-header">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="/data-kelas/delete" method="post">
+      <form action="/data-lokasi/delete" method="post">
         @csrf
         @method('delete')
         <div class="modal-body">
           <div class="row">
             <div class="col mb-3">
-              <label for="nameBasic">Yakin akan hapus data <strong id="label-del"></strong>?</label>
+              <label for="nameBasic">Yakin akan hapus data lokasi absen <strong id="label-del"></strong>?</label>
               <input type="hidden" id="id-del" name="id_del">
             </div>
           </div>
@@ -266,228 +264,232 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAistE5xXU9MzuGP7TTBwqnEiZI3JLjO9A&libraries=drawing,geometry,places"></script>
 
     <script>
-        var circle;
-        var old_circle;
-        var showcircle;
-        
-        function addMap() {
-            var mapOptions = {
-                center: new google.maps.LatLng(-7.372203, 112.656336),
-                zoom: 18  
-            };
-        
-            var map = new google.maps.Map(document.getElementById('map'),
-            mapOptions);
-        
-            var input = document.getElementById('pac-input');
-        
-            var autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.bindTo('bounds', map);
-        
-            // Specify just the place data fields that you need.
-            autocomplete.setFields(['place_id', 'geometry', 'name']);
-        
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-        
-            var infowindow = new google.maps.InfoWindow();
-            var infowindowContent = document.getElementById('infowindow-content');
-            infowindow.setContent(infowindowContent);
-        
-            var marker = new google.maps.Marker({map: map});
-        
-            marker.addListener('click', function() {
-              infowindow.open(map, marker);
-            });
-        
-            autocomplete.addListener('place_changed', function() {
-                infowindow.close();
-        
-                var place = autocomplete.getPlace();
-        
-                if (!place.geometry) {
-                return;
-                }
-        
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(18);
-                }
-        
-                // Set the position of the marker using the place ID and location.
-                    marker.setPlace({
-                    placeId: place.place_id,
-                    location: place.geometry.location
-                });
-        
-                marker.setVisible(true);
-        
-                infowindowContent.children['place-name'].textContent = place.name;
-                //infowindowContent.children['place-id'].textContent = place.place_id;
-                infowindowContent.children['place-address'].textContent = place.formatted_address;
-                infowindow.open(map, marker);
-            });
-        
-        
-            var drawingManager = new google.maps.drawing.DrawingManager({
-                // drawingMode: google.maps.drawing.OverlayType.MARKER,
-                drawingControl: true,
-                drawingControlOptions: {
-                    position: google.maps.ControlPosition.LEFT_CENTER,
-                    drawingModes: [google.maps.drawing.OverlayType.CIRCLE]
-                },
-                circleOptions: {
-                    strokeColor: '#8080ff',
-                    strokeOpacity: 0.7,
-                    strokeWeight: 1,
-                    fillColor: '#8080ff',
-                    fillOpacity: 0.15,
-                    clickable: false,
-                    editable: true,
-                    zIndex: 1
-                }
-            });  
-             drawingManager.setMap(map);
-            google.maps.event.addListener(drawingManager, 'circlecomplete', onCircleComplete);
-        }
-        
-        function onCircleComplete(shape) {
-            var lat = null;
-            var lng = null;
-            var radius = null;
-        
-            if (shape == null || (!(shape instanceof google.maps.Circle))) return; 
-            if (circle != null) {
-                circle.setMap(null);
-                circle = null;
-            }
-            
-            circle = shape;
-            $('#modal-lat').val(circle.getCenter().lat());
-            $('#modal-long').val(circle.getCenter().lng());
-            $('#modal-radius').val(circle.getRadius());
-        
-            google.maps.event.addListener(circle, 'center_changed', function () {
-                lat = circle.getCenter().lat();
-                lng = circle.getCenter().lng();
-                //alert(center);
-                $('#modal-lat').val(lat);
-                $('#modal-long').val(lng);
-            });
-        
-            google.maps.event.addListener(circle, 'radius_changed', function () {
-                radius = circle.getRadius();
-                $('#modal-radius').val(radius);
-            });
-        }
-        
-        function showMapProcess(lat, lng, radius, nama, kota){
-            var mapOptions = {
-                center: new google.maps.LatLng(parseFloat(lat), parseFloat(lng)),
-                zoom: 18
-                
-            };
-        
-            var map = new google.maps.Map(document.getElementById('show'),
-            mapOptions);
-        
-            var showcircle = new google.maps.Circle({
-                strokeColor: '#8080ff',
-                strokeOpacity: 0.7,
-                strokeWeight: 1,
-                fillColor: '#8080ff',
-                fillOpacity: 0.15,
-                draggable: false,
-                map: map,
-                center: mapOptions.center,
-                radius: parseFloat(radius)
-            });
-            showcircle.setMap(map);
-        
-            var geocoder = new google.maps.Geocoder;
-            
-            geocoder.geocode({'location': mapOptions.center}, function(results, status) {
-              if (status === 'OK') {
-                if (results[0]) {
-                  
-                    var alamat = results[0].formatted_address;
-                    var contentString = '<div id="content">'+
-                                            '<h4 id="firstHeading" class="firstHeading"> '+ nama +'</h4>'+
-                                            '<div id="bodyContent">'+
-                                                '<p> Kota : '+ kota + '</p>'+
-                                                '<hr>'+
-                                                '<p>' + alamat + '</p>'+
-                                            '</div>'+
-                                        '</div>';
-        
-                    var info = new google.maps.InfoWindow();
-        
-                    google.maps.event.addListener(showcircle, 'click', function(e) {
-                        info.setContent(contentString);
-                        info.setPosition(this.getCenter());
-                        info.open(map);
-                    });
-                } else {
-                  window.alert('No results found');
-                }
-              } else {
-                window.alert('Geocoder failed due to: ' + status);
+      var circle;
+      var old_circle;
+      var showcircle;
+      
+      function addMap() {
+          var mapOptions = {
+              center: new google.maps.LatLng(-7.372203, 112.656336),
+              zoom: 18  
+          };
+      
+          var map = new google.maps.Map(document.getElementById('map'),
+          mapOptions);
+      
+          var input = document.getElementById('pac-input');
+      
+          var autocomplete = new google.maps.places.Autocomplete(input);
+          autocomplete.bindTo('bounds', map);
+      
+          // Specify just the place data fields that you need.
+          autocomplete.setFields(['place_id', 'geometry', 'name']);
+      
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      
+          var infowindow = new google.maps.InfoWindow();
+          var infowindowContent = document.getElementById('infowindow-content');
+          infowindow.setContent(infowindowContent);
+      
+          var marker = new google.maps.Marker({map: map});
+      
+          marker.addListener('click', function() {
+            infowindow.open(map, marker);
+          });
+      
+          autocomplete.addListener('place_changed', function() {
+              infowindow.close();
+      
+              var place = autocomplete.getPlace();
+      
+              if (!place.geometry) {
+              return;
               }
-            });
-        }
+      
+              if (place.geometry.viewport) {
+                  map.fitBounds(place.geometry.viewport);
+              } else {
+                  map.setCenter(place.geometry.location);
+                  map.setZoom(18);
+              }
+      
+              // Set the position of the marker using the place ID and location.
+                  marker.setPlace({
+                  placeId: place.place_id,
+                  location: place.geometry.location
+              });
+      
+              marker.setVisible(true);
+      
+              infowindowContent.children['place-name'].textContent = place.name;
+              //infowindowContent.children['place-id'].textContent = place.place_id;
+              infowindowContent.children['place-address'].textContent = place.formatted_address;
+              infowindow.open(map, marker);
+          });
+      
+      
+          var drawingManager = new google.maps.drawing.DrawingManager({
+              // drawingMode: google.maps.drawing.OverlayType.MARKER,
+              drawingControl: true,
+              drawingControlOptions: {
+                  position: google.maps.ControlPosition.LEFT_CENTER,
+                  drawingModes: [google.maps.drawing.OverlayType.CIRCLE]
+              },
+              circleOptions: {
+                  strokeColor: '#8080ff',
+                  strokeOpacity: 0.7,
+                  strokeWeight: 1,
+                  fillColor: '#8080ff',
+                  fillOpacity: 0.15,
+                  clickable: false,
+                  editable: true,
+                  zIndex: 1
+              }
+          });  
+            drawingManager.setMap(map);
+          google.maps.event.addListener(drawingManager, 'circlecomplete', onCircleComplete);
+      }
+      
+      function onCircleComplete(shape) {
+          var lat = null;
+          var lng = null;
+          var radius = null;
+      
+          if (shape == null || (!(shape instanceof google.maps.Circle))) return; 
+          if (circle != null) {
+              circle.setMap(null);
+              circle = null;
+          }
+          
+          circle = shape;
+          $('#modal-lat').val(circle.getCenter().lat());
+          $('#modal-long').val(circle.getCenter().lng());
+          $('#modal-radius').val(circle.getRadius());
+      
+          google.maps.event.addListener(circle, 'center_changed', function () {
+              lat = circle.getCenter().lat();
+              lng = circle.getCenter().lng();
+              //alert(center);
+              $('#modal-lat').val(lat);
+              $('#modal-long').val(lng);
+          });
+      
+          google.maps.event.addListener(circle, 'radius_changed', function () {
+              radius = circle.getRadius();
+              $('#modal-radius').val(radius);
+          });
+      }
+      
+      function showMapProcess(lat, lng, radius, nama, kota){
+        var mapOptions = {
+            center: new google.maps.LatLng(parseFloat(lat), parseFloat(lng)),
+            zoom: 18
+            
+        };
+    
+        var map = new google.maps.Map(document.getElementById('show'),
+        mapOptions);
+    
+        var showcircle = new google.maps.Circle({
+            strokeColor: '#8080ff',
+            strokeOpacity: 0.7,
+            strokeWeight: 1,
+            fillColor: '#8080ff',
+            fillOpacity: 0.15,
+            draggable: false,
+            map: map,
+            center: mapOptions.center,
+            radius: parseFloat(radius)
+        });
+        showcircle.setMap(map);
+    
+        var geocoder = new google.maps.Geocoder;
         
-        function updateMap(lat, lng, radius){
-            var mapOptions = {
-                center: new google.maps.LatLng(parseFloat(lat), parseFloat(lng)),
-                zoom: 18
-            };
-        
-            var map = new google.maps.Map(document.getElementById('map'),
-            mapOptions);
-        
-            var old_circle = new google.maps.Circle({
-                strokeColor: '#8080ff',
-                strokeOpacity: 0.7,
-                strokeWeight: 1,
-                fillColor: '#8080ff',
-                fillOpacity: 0.15,
-                draggable: false,
-                map: map,
-                editable: true,
-                  draggable: true,
-                center: mapOptions.center,
-                radius: parseFloat(radius)
-            });
-            old_circle.setMap(map);
-        
-            google.maps.event.addListener(old_circle, 'center_changed', function () {
-                lat = old_circle.getCenter().lat();
-                lng = old_circle.getCenter().lng();
-        
-                $('#modal-lat').val(lat);
-                $('#modal-long').val(lng);
-            });
-        
-            google.maps.event.addListener(old_circle, 'radius_changed', function () {
-                radius = old_circle.getRadius();
-                $('#modal-radius').val(radius);
-            });  
-        }
+        geocoder.geocode({'location': mapOptions.center}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              
+                var alamat = results[0].formatted_address;
+                var contentString = '<div id="content">'+
+                                        '<h4 id="firstHeading" class="firstHeading"> '+ nama +'</h4>'+
+                                        '<div id="bodyContent">'+
+                                            '<p> Kota : '+ kota + '</p>'+
+                                            '<hr>'+
+                                            '<p>' + alamat + '</p>'+
+                                        '</div>'+
+                                    '</div>';
+    
+                var info = new google.maps.InfoWindow();
+    
+                google.maps.event.addListener(showcircle, 'click', function(e) {
+                    info.setContent(contentString);
+                    info.setPosition(this.getCenter());
+                    info.open(map);
+                });
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+      }
+      
+      function updateMap(lat, lng, radius){
+        var mapOptions = {
+            center: new google.maps.LatLng(parseFloat(lat), parseFloat(lng)),
+            zoom: 18
+        };
+    
+        var map = new google.maps.Map(document.getElementById('map'),
+        mapOptions);
+    
+        var old_circle = new google.maps.Circle({
+            strokeColor: '#8080ff',
+            strokeOpacity: 0.7,
+            strokeWeight: 1,
+            fillColor: '#8080ff',
+            fillOpacity: 0.15,
+            draggable: false,
+            map: map,
+            editable: true,
+              draggable: true,
+            center: mapOptions.center,
+            radius: parseFloat(radius)
+        });
+        old_circle.setMap(map);
+    
+        google.maps.event.addListener(old_circle, 'center_changed', function () {
+            lat = old_circle.getCenter().lat();
+            lng = old_circle.getCenter().lng();
+    
+            $('#modal-lat').val(lat);
+            $('#modal-long').val(lng);
+        });
+    
+        google.maps.event.addListener(old_circle, 'radius_changed', function () {
+            radius = old_circle.getRadius();
+            $('#modal-radius').val(radius);
+        });  
+      }
     </script>
 
     <script>
-        function showMap(lat, lng, radius, nama, kota){
-            showMapProcess(lat, lng, radius, nama, kota);
-            $('#modal_map').modal('show');
-        };
-        function add(){
-            $('#modal-lat').val('');
-            $('#modal-long').val('');
-            $('#modal-radius').val('');
-            addMap();
-            $('#modalForm').modal('show');
-        };
+      function showMap(lat, lng, radius, nama, kota){
+          showMapProcess(lat, lng, radius, nama, kota);
+          $('#modal_map').modal('show');
+      };
+      function add(){
+          $('#modal-lat').val('');
+          $('#modal-long').val('');
+          $('#modal-radius').val('');
+          addMap();
+          $('#modalForm').modal('show');
+      };
+
+      function editLokasi(id, nama, lat, lng, radius){
+
+      }
     </script>
 
     @if (count($errors) > 0)
@@ -540,13 +542,17 @@
             success: function(data) {
               // console.log(data)
               let {
-                dataKelas
+                dataLokasi
               } = data
               $('#modal-form').attr('action','{{ url("/data-lokasi/edit") }}');
-              $('#id-kelas').val(dataKelas.id);
-              $('#nama-kelas').val(dataKelas.kelas);
+              $('#modal-id').val(dataLokasi.id);
+              $('#nama-lokasi').val(dataLokasi.nama);
+              $('#modal-lat').val(dataLokasi.latitude);
+              $('#modal-long').val(dataLokasi.longitude);
+              $('#modal-radius').val(dataLokasi.radius);
+              updateMap(dataLokasi.latitude, dataLokasi.longitude, dataLokasi.radius);
               $('#modalForm').modal('show');
-              $('#label-modal').text('Edit Data Kelas');
+              $('#label-modal').text('Edit Data Lokasi');
               $('#btn-modal').text('Update Data');
             }
           });
@@ -559,9 +565,9 @@
             type: "GET",
             dataType: "JSON",
             success: function(data) {
-              let {dataKelas} = data
-              $('#id-del').val(dataKelas.id);
-              $('#label-del').text(dataKelas.kelas);
+              let {dataLokasi} = data
+              $('#id-del').val(dataLokasi.id);
+              $('#label-del').text(dataLokasi.nama);
               $('#modalHapus').modal('show');
             }
           });

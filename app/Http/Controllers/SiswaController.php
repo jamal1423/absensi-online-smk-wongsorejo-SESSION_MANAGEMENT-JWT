@@ -20,7 +20,7 @@ class SiswaController extends Controller
 
     public function data_siswa(){
         $data = $this->cekSession->cek_session();
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             try{
                 $dataSiswa = Siswa::paginate(10);
                 $dataKelas = Kelas::all();
@@ -40,7 +40,7 @@ class SiswaController extends Controller
 
     public function data_siswa_add(Request $request){
         $data = $this->cekSession->cek_session();
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             try {
                 $validatedData = $request->validate([
                     'nama' => 'required',
@@ -83,7 +83,7 @@ class SiswaController extends Controller
 
     public function data_siswa_edit (Request $request){
         $data = $this->cekSession->cek_session();
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             try {
                 $validatedData = $request->validate([
                     'nama' => 'required',
@@ -125,7 +125,7 @@ class SiswaController extends Controller
 
     public function data_siswa_delete(Request $request){
         $data = $this->cekSession->cek_session();
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             try {
                 $gmbr = $request->oldImageDel;
                 $image_path = public_path() . '/foto-siswa/' . $gmbr;

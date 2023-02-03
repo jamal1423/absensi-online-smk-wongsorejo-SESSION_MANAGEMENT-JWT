@@ -17,7 +17,7 @@ class KelasController extends Controller
 
     public function data_kelas(){
         $data = $this->cekSession->cek_session();
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             try{
                 $dataKelas = Kelas::paginate(10);
                 return view('admin.pages.data-kelas',[
@@ -33,7 +33,7 @@ class KelasController extends Controller
 
     public function data_kelas_add(Request $request){
         $data = $this->cekSession->cek_session();
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             try {
                 $validatedData = $request->validate([
                     'kelas' => 'required',
@@ -51,7 +51,7 @@ class KelasController extends Controller
 
     public function data_kelas_edit(Request $request){
         $data = $this->cekSession->cek_session();
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             try {
                 $validatedData = $request->validate([
                     'kelas' => 'required',
@@ -70,7 +70,7 @@ class KelasController extends Controller
 
     public function data_kelas_delete(Request $request){
         $data = $this->cekSession->cek_session();
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             try {
                 Kelas::destroy($request->id_del);
                 return redirect('/data-kelas')->with(['kelasDelete' => 'ok']);

@@ -8,7 +8,7 @@
   <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
     <div class="navbar-nav align-items-center">
       <div class="nav-item d-flex align-items-center">
-        <span class="fs-5">Selamat Datang, <strong>Mochammad Jamal</strong></span>
+        <span class="fs-5">Selamat Datang, <strong id="nama1">...</strong></span>
       </div>
     </div>
     
@@ -30,8 +30,8 @@
                   </div>
                 </div>
                 <div class="flex-grow-1">
-                  <span class="fw-semibold d-block">Mochammad Jamal</span>
-                  <small class="text-muted">[Administrator]</small>
+                  <span class="fw-semibold d-block" id="nama2">...</span>
+                  [<small class="text-muted" id="role"></small>]
                 </div>
               </div>
             </a>

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LokasiController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SiswaController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::controller(DashboardController::class)->group(function () {
     Route::get('dashboard', 'halaman_dashboard');
+    Route::get('get-data-header', 'get_data_header');
 });
 
 Route::controller(KelasController::class)->group(function () {
@@ -55,6 +57,4 @@ Route::controller(LokasiController::class)->group(function () {
     Route::get('get-data-lokasi/{id}', 'get_data_lokasi');
 });
 
-// Route::group(['middleware' => 'auth:web'], function () {
-//     Route::get('/data-lokasi',[LokasiController::class, 'data_lokasi']);
-// });
+// Route::get('/tes',[SessionController::class, 'cek_session']);

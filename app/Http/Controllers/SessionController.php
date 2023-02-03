@@ -29,8 +29,15 @@ class SessionController extends Controller
                 
                 $cekUser = User::where('username','=',$username)
                 ->where('role','=',$role)->count();
+
+                $cekSesiUser = User::select('username')
+                ->where('username','=',$username)
+                ->first();
                 
-                return $cekUser;
+                return ([
+                    'us1' => $cekUser,
+                    'us2' => $cekSesiUser
+                ]);
             }else{
                 return false;
             }

@@ -20,7 +20,7 @@ class AuthController extends Controller
     public function login_admin(){
         $data = $this->cekSession->cek_session();
         // dd($data);
-        if($data > 0){
+        if(isset($data['us1']) > 0){
             return view('admin.pages.dashboard');
             // return redirect('/dashboard');
         }else{

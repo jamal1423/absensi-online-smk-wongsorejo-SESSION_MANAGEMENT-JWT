@@ -66,70 +66,95 @@
 </head>
 
 <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar  ">
-        <div class="layout-container">
-        
-        <!-- MENU NAV -->
-        @include('admin.partials.menu-nav')
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar  ">
+      <div class="layout-container">
+      
+      <!-- MENU NAV -->
+      @include('admin.partials.menu-nav')
 
-        <div class="layout-page">
-            <!-- Menu Header -->
-            @include('admin.partials.header')
-        
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-            
-            <div class="container-xxl flex-grow-1 container-p-y">
-                <!-- isi content -->
-                @yield('content')  
-            </div>
-            
-            @include('admin.partials.footer')
-            
-            <div class="content-backdrop fade"></div>
-            </div>
-            <!-- Content wrapper -->
-        </div>
-        <!-- / Layout page -->
-        </div>
-        <!-- Overlay -->
-        <div class="layout-overlay layout-menu-toggle"></div>
-    </div>
-    <!-- / Layout wrapper -->
+      <div class="layout-page">
+          <!-- Menu Header -->
+          @include('admin.partials.header')
+      
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+          
+          <div class="container-xxl flex-grow-1 container-p-y">
+              <!-- isi content -->
+              @yield('content')  
+          </div>
+          
+          @include('admin.partials.footer')
+          
+          <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+      </div>
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="{{ asset('admin/assets/vendor/libs/jquery/jquery.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/popper/popper.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/js/bootstrap.js') }}"></script>
+  <script src="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
   
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="{{ asset('admin/assets/vendor/libs/jquery/jquery.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/popper/popper.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-    
-    <script src="{{ asset('admin/assets/vendor/js/menu.js') }}"></script>
-    <!-- endbuild -->
+  <script src="{{ asset('admin/assets/vendor/js/menu.js') }}"></script>
+  <!-- endbuild -->
 
-    <!-- Vendors JS -->
-    <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
+  <!-- Vendors JS -->
+  <script src="{{ asset('admin/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 
-    <!-- Main JS -->
-    <script src="{{ asset('admin/assets/js/main.js') }}"></script>
+  <!-- Main JS -->
+  <script src="{{ asset('admin/assets/js/main.js') }}"></script>
 
-    
-    <script src="{{ asset('admin/assets/js/trix.js') }}"></script>
-    <script>
-      document.addEventListener('trix-file-accept', function(e) {
-        e.preventDefault();
-      });
-      </script>
+  
+  <script src="{{ asset('admin/assets/js/trix.js') }}"></script>
+  <script>
+  document.addEventListener('trix-file-accept', function(e) {
+    e.preventDefault();
+  });
+  </script>
 
-<!-- Modals -->
-{{-- <script src="{{ asset('admin/assets/js/ui-modals.js') }}"></script> --}}
+  <!-- Modals -->
+  {{-- <script src="{{ asset('admin/assets/js/ui-modals.js') }}"></script> --}}
 
-<!-- Page JS -->
-{{-- <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script> --}}
-{{-- <script src="{{ asset('admin/assets/js/ui-toasts.js') }}"></script> --}}
-{{-- <script src="{{ asset('admin/assets/js/sweetalert.js') }}"></script>
-<script src="{{ asset('admin/assets/js/sweetalert1.js') }}"></script> --}}
+  <!-- Page JS -->
+  {{-- <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script> --}}
+  {{-- <script src="{{ asset('admin/assets/js/ui-toasts.js') }}"></script> --}}
+  {{-- <script src="{{ asset('admin/assets/js/sweetalert.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/sweetalert1.js') }}"></script> --}}
+
+  <script>
+    $(document).ready(function() {
+			$.ajax({
+				url: "/get-data-header",
+				type: "GET",
+				dataType: "JSON",
+				success: function(data) {
+          let {
+            dataUser,
+            totalKelas,
+            totalSiswa,
+            totalLokasi,
+          } = data
+
+					$('#nama1').text(dataUser.nama);
+					$('#nama2').text(dataUser.nama);
+					$('#role').text(dataUser.role);
+					$('#totalKelas').text(totalKelas);
+					$('#totalSiswa').text(totalSiswa);
+					$('#totalLokasi').text(totalLokasi);
+				}
+			});
+    });
+  </script>
 
 @stack('scripts')
 </body>
