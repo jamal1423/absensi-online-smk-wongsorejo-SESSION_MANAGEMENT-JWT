@@ -19,9 +19,11 @@ class LokasiController extends Controller
         $data = $this->cekSession->cek_session();
         if(isset($data['us1']) > 0){
             try{
+                $mapApiKey=env('GOOGLE_MAP_API_KEY');
                 $dataLokasi = Lokasi::paginate(10);
                 return view('admin.pages.data-lokasi',[
                     'dataLokasi' => $dataLokasi,
+                    'mapApiKey' => $mapApiKey,
                 ]);
             } catch (\Illuminate\Database\QueryException $e) {
                 return redirect('/data-lokasi')->with(['lokasiError' => 'ok']);

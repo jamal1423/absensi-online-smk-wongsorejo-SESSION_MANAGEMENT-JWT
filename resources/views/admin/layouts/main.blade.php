@@ -123,13 +123,8 @@
   </script>
 
   <!-- Modals -->
-  {{-- <script src="{{ asset('admin/assets/js/ui-modals.js') }}"></script> --}}
-
-  <!-- Page JS -->
-  {{-- <script src="{{ asset('admin/assets/js/dashboards-analytics.js') }}"></script> --}}
-  {{-- <script src="{{ asset('admin/assets/js/ui-toasts.js') }}"></script> --}}
-  {{-- <script src="{{ asset('admin/assets/js/sweetalert.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/sweetalert1.js') }}"></script> --}}
+  <script src="{{ asset('admin/assets/js/ui-modals.js') }}"></script>
+  <script src="{{ asset('admin/assets/js/ui-toasts.js') }}"></script>
 
   <script>
     $(document).ready(function() {

@@ -259,9 +259,8 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('admin/assets/js/ui-modals.js') }}"></script>
     <script src="{{ asset('admin/assets/js/ui-toasts.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAistE5xXU9MzuGP7TTBwqnEiZI3JLjO9A&libraries=drawing,geometry,places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ $mapApiKey }}&libraries=drawing,geometry,places"></script>
 
     <script>
       var circle;

@@ -323,7 +323,6 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('admin/assets/js/ui-modals.js') }}"></script>
     <script src="{{ asset('admin/assets/js/ui-toasts.js') }}"></script>
 
     @if (count($errors) > 0)
@@ -366,7 +365,7 @@
     </script>
     @endif
 
-    @if(Session::get('kelasError') == 'ok')
+    @if(Session::get('siswaError') == 'ok')
     <script>
       window.onload = function() {
         $("#showToastPlacement").click();

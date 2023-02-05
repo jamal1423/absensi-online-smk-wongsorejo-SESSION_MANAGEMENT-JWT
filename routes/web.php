@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KelasController;
@@ -55,6 +56,14 @@ Route::controller(LokasiController::class)->group(function () {
     Route::post('data-lokasi/edit', 'data_lokasi_edit');
     Route::delete('data-lokasi/delete', 'data_lokasi_delete');
     Route::get('get-data-lokasi/{id}', 'get_data_lokasi');
+});
+
+Route::controller(AdminController::class)->group(function () {
+    Route::get('data-admin', 'data_admin');
+    Route::post('data-admin/add', 'data_admin_add');
+    Route::post('data-admin/edit', 'data_admin_edit');
+    Route::delete('data-admin/delete', 'data_admin_delete');
+    Route::get('get-data-admin/{id}', 'get_data_admin');
 });
 
 // Route::get('/tes',[SessionController::class, 'cek_session']);
