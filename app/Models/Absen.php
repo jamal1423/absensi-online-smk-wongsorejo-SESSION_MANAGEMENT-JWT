@@ -10,5 +10,16 @@ class Absen extends Model
     use HasFactory;
     protected $table = 'absen';
     protected $primaryKey = 'id';
-    protected $guarded = [];
+    protected $fillable = [
+        'kelas',
+        'nama',
+        'userlog',
+        'c_in',
+        'tanggal_c_in',
+        'c_out',
+        'tanggal_c_out',
+        'longitude',
+        'latitude',
+        'lokasi',
+    ];
 }

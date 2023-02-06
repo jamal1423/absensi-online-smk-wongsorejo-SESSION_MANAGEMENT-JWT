@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -64,6 +65,10 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('data-admin/edit', 'data_admin_edit');
     Route::delete('data-admin/delete', 'data_admin_delete');
     Route::get('get-data-admin/{id}', 'get_data_admin');
+});
+
+Route::controller(AbsenController::class)->group(function () {
+    Route::get('data-kehadiran', 'data_kehadiran');
 });
 
 // Route::get('/tes',[SessionController::class, 'cek_session']);

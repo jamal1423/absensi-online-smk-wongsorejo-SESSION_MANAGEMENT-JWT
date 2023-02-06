@@ -261,21 +261,21 @@
             <div class="row">
               <div class="col col-lg-12">
                   <div class="row">
-                      <div class="col mb-3">
-                          <label for="nameBasic" class="form-label">Username</label>
-                          <input class="form-control" type="text" name="username" id="username-siswa" placeholder="Username" value="{{ old('username') }}">
-                          @error('username')
-                              <div class="form-text text-danger">{{ $message }}</div>
-                          @enderror
-                      </div>
-                      
-                      <div class="col mb-3">
-                          <label for="nameBasic" class="form-label">Password</label>
-                          <input class="form-control" type="text" name="password" id="password-siswa" placeholder="Password" value="{{ old('password') }}">
-                          @error('password')
-                              <div class="form-text text-danger">{{ $message }}</div>
-                          @enderror
-                      </div>
+                    <div class="col mb-3">
+                      <label for="nameBasic" class="form-label">Username</label>
+                      <input class="form-control" type="text" name="username" id="username-siswa" placeholder="Username" value="{{ old('username') }}">
+                      @error('username')
+                          <div class="form-text text-danger">{{ $message }}</div>
+                      @enderror
+                    </div>
+                    
+                    {{-- <div class="col mb-3">
+                      <label for="nameBasic" class="form-label">Password</label>
+                      <input class="form-control" type="text" name="password" id="password-siswa" placeholder="Password" value="{{ old('password') }}">
+                      @error('password')
+                          <div class="form-text text-danger">{{ $message }}</div>
+                      @enderror
+                    </div> --}}
                   </div>
               </div>
             </div>
