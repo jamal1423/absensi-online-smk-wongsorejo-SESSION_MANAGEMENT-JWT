@@ -17,8 +17,8 @@ class AbsenController extends Controller
 
     public function data_kehadiran(){
         $data = $this->cekSession->cek_session();
-        $dataUsername = $data['us2'];
         if(isset($data['us1']) > 0){
+            $dataUsername = $data['us2'];
             try{
                 $dataKehadiran = Absen::select('absen.*', 'siswa.nis', 'siswa.username', 'siswa.nama as nama_siswa', 'siswa.kelas', 'siswa.foto')
                 ->join('siswa', 'siswa.username', '=', 'absen.userlog')

@@ -32,8 +32,8 @@ class DashboardController extends Controller
 
     public function get_data_header(){
         $data = $this->cekSession->cek_session();
-        $dataUsername = $data['us2'];
         if(isset($data['us1']) > 0){
+            $dataUsername = $data['us2'];
             $dataUser = User::where('username','=',$dataUsername->username)->first();
             $totalKelas =  Kelas::count();
             $totalSiswa = Siswa::count();

@@ -22,10 +22,8 @@ class AuthController extends Controller
         // dd($data);
         if(isset($data['us1']) > 0){
             return view('admin.pages.dashboard');
-            // return redirect('/dashboard');
         }else{
             return view('admin.pages.login-admin');
-            // return redirect('/login');
         }
     }
 
@@ -42,6 +40,7 @@ class AuthController extends Controller
             return back()->with('loginError', 'Login gagal, ulangi lagi!');
         }
 
+        // dd($token);
         if (auth()->guard('web')->check()) {
             $request->session()->regenerate();
             $request->session()->put('tokenJWT',$token);
