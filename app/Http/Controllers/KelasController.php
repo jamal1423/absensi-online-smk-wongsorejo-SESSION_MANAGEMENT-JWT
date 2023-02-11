@@ -19,7 +19,7 @@ class KelasController extends Controller
         $data = $this->cekSession->cek_session();
         if(isset($data['us1']) > 0){
             try{
-                $dataKelas = Kelas::paginate(10);
+                $dataKelas = Kelas::orderBy('kelas')->paginate(10);
                 return view('admin.pages.data-kelas',[
                     'dataKelas' => $dataKelas
                 ]);
@@ -36,7 +36,7 @@ class KelasController extends Controller
         if(isset($data['us1']) > 0){
             try {
                 $validatedData = $request->validate([
-                    'kelas' => 'required',
+                    'kelas' => 'required|unique:kelas',
                 ]);
     
                 Kelas::create($validatedData);
@@ -54,7 +54,7 @@ class KelasController extends Controller
         if(isset($data['us1']) > 0){
             try {
                 $validatedData = $request->validate([
-                    'kelas' => 'required',
+                    'kelas' => 'required|unique:kelas',
                 ]);
     
                 Kelas::where('id', $request->id)

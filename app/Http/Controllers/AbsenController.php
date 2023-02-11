@@ -22,6 +22,7 @@ class AbsenController extends Controller
             try{
                 $dataKehadiran = Absen::select('absen.*', 'siswa.nis', 'siswa.username', 'siswa.nama as nama_siswa', 'siswa.kelas', 'siswa.foto')
                 ->join('siswa', 'siswa.username', '=', 'absen.userlog')
+                ->orderBy('tgl_clock_in','DESC')
                 ->paginate(50);
                 return view('admin.pages.data-kehadiran',[
                     'dataKehadiran' => $dataKehadiran,

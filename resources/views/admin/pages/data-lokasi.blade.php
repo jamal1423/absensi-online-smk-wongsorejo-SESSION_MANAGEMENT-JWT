@@ -176,7 +176,7 @@
             <div class="row">
                 <div class="col mb-3">
                     <div class="form-group">
-                        <label for="nameBasic" class="form-label">Nama Lokasi</label>
+                        <label for="nameBasic" class="form-label">Map Lokasi</label>
                         <div class="pac-container" style="display: none">
                             <input id="pac-input" class="controls" type="text" placeholder="Masukan Lokasi">
                         </div>
