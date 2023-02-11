@@ -30,13 +30,13 @@
                     <td>{{ $hadir->nama }}</td>
                     <td>{{ $hadir->kelas }}</td>
                     <td>
-                        <span class="badge bg-label-success me-1">{{ $hadir->tgl_clock_in }}</span>
+                        <span class="badge bg-label-success me-1">{{ date('d-m-Y H:i:s', strtotime($hadir->tgl_clock_in)) }}</span>
                     </td>
                     <td>
-                        @if($hadir->clock_out == "NO")
+                        @if($hadir->clock_out == "")
                             <span class="badge bg-label-danger me-1">Belum Clock-Out</span>
                         @else
-                            <span class="badge bg-label-success me-1">{{ $hadir->tgl_clock_out }}</span>
+                            <span class="badge bg-label-success me-1">{{ date('d-m-Y H:i:s', strtotime($hadir->tgl_clock_out)) }}</span>
                         @endif
                     </td>
                     <td>{{ $hadir->lokasi }}</td>
