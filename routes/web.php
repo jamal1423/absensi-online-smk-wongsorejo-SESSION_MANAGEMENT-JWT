@@ -42,6 +42,7 @@ Route::controller(KelasController::class)->group(function () {
     Route::post('data-kelas/edit', 'data_kelas_edit');
     Route::delete('data-kelas/delete', 'data_kelas_delete');
     Route::get('get-data-kelas/{id}', 'get_data_kelas');
+    Route::get('cetak-qr-code/{kelas}', 'cetak_qr_code');
 });
 
 Route::controller(SiswaController::class)->group(function () {
@@ -73,5 +74,3 @@ Route::controller(AbsenController::class)->group(function () {
 });
 
 // Route::get('/tes',[SessionController::class, 'cek_session']);
-
-Route::get('/kiarkode', [QRCodeController::class, 'index']);

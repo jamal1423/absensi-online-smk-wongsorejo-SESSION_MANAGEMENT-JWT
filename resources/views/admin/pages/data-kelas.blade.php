@@ -28,6 +28,7 @@
             <div class="dropdown">
             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
               <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ url('/cetak-qr-code/'.base64_encode($kelas->kelas)) }}" target="_blank"><i class="bx bxs-printer me-1 text-info"></i> Cetak QR Code</a>
                 <a class="dropdown-item" href="#" id="kelas-edit-{{ $kelas->id }}" onClick="dataKelasEdit(this)" data-id="{{ base64_encode($kelas->id) }}"><i class="bx bx-edit-alt me-1 text-primary"></i> Edit</a>
                 <a class="dropdown-item" href="#" id="kelas-del-{{ $kelas->id }}" onClick="dataKelasDel(this)" data-id="{{ base64_encode($kelas->id) }}"><i class="bx bx-trash me-1 text-danger"></i> Hapus</a>
               </div>

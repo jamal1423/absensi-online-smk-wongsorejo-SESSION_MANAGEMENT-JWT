@@ -89,4 +89,20 @@ class KelasController extends Controller
             'dataKelas' => $dataKelas
         ]);
     }
+
+    public function cetak_qr_code($kelas){
+        $data = $this->cekSession->cek_session();
+        if(isset($data['us1']) > 0){
+            try {
+                $kelas = base64_decode($kelas);
+                return view('admin.pages.qrcode',[
+                    'kelas' => $kelas
+                ]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return redirect('/data-kelas')->with(['kelasError' => 'ok']);
+            }
+        }else{
+            return view('admin.pages.login-admin');
+        }
+    }
 }
